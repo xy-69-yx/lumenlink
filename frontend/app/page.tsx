@@ -396,7 +396,7 @@ export default function Home() {
             </span>
             <Button onClick={handleConnect} variant={wallet.connected ? "secondary" : "primary"}>
               <Wallet className="h-4 w-4" />
-              {wallet.connected ? `${wallet.address.slice(0, 5)}…${wallet.address.slice(-4)}` : "Connect wallet"}
+              {wallet.connected ? `Switch wallet · ${wallet.address.slice(0, 5)}…${wallet.address.slice(-4)}` : "Connect Freighter"}
             </Button>
           </div>
         </header>
