@@ -99,6 +99,9 @@ function AssetPreview({ draft }: { draft: RequestDraft }) {
           <div className="mt-2 text-lg font-semibold text-white">
             {uri ? "web+stellar:pay" : "Waiting for recipient"}
           </div>
+          <p className="preview-copy">
+            {uri ? "Scan the QR or copy the payment link to share the request." : "Add a recipient to generate the QR and payment link."}
+          </p>
         </div>
         <div className="rounded-2xl border border-white/12 bg-white/5 px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-white/50">
           SEP-0007

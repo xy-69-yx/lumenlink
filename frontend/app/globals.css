@@ -84,6 +84,7 @@ textarea { min-height: 86px !important; resize: vertical; }
 .preview-title { display: flex; justify-content: space-between; align-items: center; margin: 1px 2px 14px; font-size: 13px; font-weight: 700; }
 .live-dot { display: inline-flex; align-items: center; gap: 6px; color: var(--green); font: 600 10px var(--font-mono); text-transform: uppercase; }
 .live-dot::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.preview-copy { margin: 8px 0 0; color: #b8bec9; font: 400 11px/1.45 var(--font-mono); letter-spacing: .03em; }
 .preview-sticky > div:nth-child(2) { border-radius: 14px !important; background: var(--navy) !important; border: 0 !important; box-shadow: none !important; padding: 17px !important; }
 .preview-sticky > div:nth-child(2) .text-white { color: white !important; }
 .preview-sticky > div:nth-child(2) [class*="text-white/"] { color: #9da4b4 !important; }
