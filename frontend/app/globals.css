@@ -26,6 +26,7 @@ body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(
 button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .48; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(101,72,232,.18); outline-offset: 2px; }
 ::selection { background: #d9d2ff; }
 
 .app-shell { display: grid; grid-template-columns: 76px minmax(0, 1fr); min-height: 100vh; }
@@ -58,6 +59,7 @@ button:disabled { cursor: not-allowed; opacity: .48; }
 .hero-chip { display: inline-flex; align-items: center; padding: 7px 11px; border: 1px solid #dde0e4; border-radius: 999px; background: #fff; color: #4b5158; font: 600 10px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
 .new-request, .contract-copy { display: inline-flex; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px; background: white; color: #30343a; font-size: 13px; font-weight: 600; box-shadow: 0 2px 7px rgba(16,18,24,.03); }
 .new-request:hover, .contract-copy:hover { border-color: #bcb5ec; color: var(--violet); }
+.new-request:focus-visible, .contract-copy:focus-visible { border-color: var(--violet); color: var(--violet); box-shadow: 0 0 0 3px rgba(101,72,232,.12); }
 
 .workspace-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(320px, .65fr); gap: 22px; align-items: start; }
 .editor-card, .preview-sticky, .registry-section { background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 8px 30px rgba(27,31,40,.045); }
@@ -133,6 +135,7 @@ button.bg-transparent { color: var(--muted) !important; }
 .row-badge.off { border-color: #edd8d8; color: #b65454; background: #fff6f6; }
 .row-actions button { width: 30px; height: 30px; display: grid; place-items: center; border: 0; border-radius: 7px; background: transparent; color: #8a9097; }
 .row-actions button:hover { color: var(--violet); background: #eeeafd; }
+.row-actions button:focus-visible { color: var(--violet); background: #eeeafd; box-shadow: 0 0 0 3px rgba(101,72,232,.12); }
 .row-actions button:last-child:hover { color: #d94b4b; background: #fff0f0; }
 .row-actions svg { width: 14px; height: 14px; }
 .empty-state { padding: 23px; border: 1px dashed #d7dade; border-radius: 10px; text-align: center; color: #9a9fa5; font-size: 11px; }
