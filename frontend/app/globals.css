@@ -43,6 +43,10 @@ button:disabled { cursor: not-allowed; opacity: .48; }
 .network-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 11px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
 .network-pill i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,106,.12); }
 .contract-state { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 12px; }
+.wallet-chip { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid #dfe2e5; border-radius: 999px; background: #fff; color: #56606a; font: 600 11px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+.wallet-chip i { width: 6px; height: 6px; border-radius: 50%; background: #b7bcc2; box-shadow: 0 0 0 3px rgba(183,188,194,.15); }
+.wallet-chip.connected { border-color: #cde9dc; color: #11845b; }
+.wallet-chip.connected i { background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,106,.12); }
 
 .page-wrap { width: min(1360px, 100%); margin: 0 auto; padding: 42px 40px 28px; }
 .page-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 30px; }

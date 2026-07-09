@@ -378,6 +378,10 @@ export default function Home() {
           </div>
           <div className="topbar-actions">
             <span className="contract-state">v{contractVersion} · {contractStatus}</span>
+            <span className={`wallet-chip ${wallet.connected ? "connected" : ""}`}>
+              <i />
+              {wallet.connected ? `${wallet.address.slice(0, 6)}…${wallet.address.slice(-4)}` : "Freighter idle"}
+            </span>
             <Button onClick={handleConnect} variant={wallet.connected ? "secondary" : "primary"}>
               <Wallet className="h-4 w-4" />
               {wallet.connected ? `${wallet.address.slice(0, 5)}…${wallet.address.slice(-4)}` : "Connect wallet"}
