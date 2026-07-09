@@ -429,10 +429,10 @@ export default function Home() {
                   <Input value={draft.recipient} onChange={(event) => setDraft((current) => ({ ...current, recipient: event.target.value }))} placeholder="G..." />
                 </Field>
                 <div className="split-fields">
-                  <Field label="Amount">
+                  <Field label="Amount" hint="Decimal value">
                     <Input value={draft.amount} onChange={(event) => setDraft((current) => ({ ...current, amount: event.target.value }))} placeholder="250.00" />
                   </Field>
-                  <Field label="Asset">
+                  <Field label="Asset" hint="Native or token">
                     <select
                       value={draft.asset.kind}
                       onChange={(event) => setDraft((current) => ({
@@ -443,12 +443,12 @@ export default function Home() {
                           issuer: current.asset.kind === "credit" ? current.asset.issuer : "",
                         },
                       }))}
-                    >
+                      >
                       <option value="native">XLM · Native</option>
                       <option value="credit">Custom token</option>
                     </select>
                   </Field>
-                  <Field label="Decimals">
+                  <Field label="Decimals" hint="Atomic scale">
                     <Input inputMode="numeric" value={draft.decimals} onChange={(event) => setDraft((current) => ({ ...current, decimals: event.target.value.replace(/[^\d]/g, "") }))} />
                   </Field>
                 </div>
