@@ -519,8 +519,15 @@ export default function Home() {
                 {lookup.request ? (
                   <article className="request-row featured">
                     <div className="request-id">#{lookup.request.id.toString()}</div>
-                    <div><strong>{lookup.request.label}</strong><span>{formatAtomicAmount(BigInt(lookup.request.amount), 7)} · {lookup.request.memo ?? "No memo"}</span></div>
-                    <div className="row-actions"><button onClick={() => loadRequestIntoForm(lookup.request!)}><ArrowUpRight /></button><button onClick={() => handleDeleteOnChain(lookup.request!.id)}><Trash2 /></button></div>
+                    <div>
+                      <strong>{lookup.request.label}</strong>
+                      <span>{formatAtomicAmount(BigInt(lookup.request.amount), 7)} · {lookup.request.memo ?? "No memo"}</span>
+                    </div>
+                    <div className="row-actions">
+                      <span className={`row-badge ${lookup.request.active ? "on" : "off"}`}>{lookup.request.active ? "Active" : "Paused"}</span>
+                      <button title="Load into form" aria-label="Load into form" onClick={() => loadRequestIntoForm(lookup.request!)}><ArrowUpRight /></button>
+                      <button title="Delete request" aria-label="Delete request" onClick={() => handleDeleteOnChain(lookup.request!.id)}><Trash2 /></button>
+                    </div>
                   </article>
                 ) : null}
               </div>
@@ -534,8 +541,15 @@ export default function Home() {
                   {listing.requests.map((item) => (
                     <article className="request-row" key={item.id.toString()}>
                       <div className="request-id">#{item.id.toString()}</div>
-                      <div><strong>{item.label}</strong><span>{formatAtomicAmount(BigInt(item.amount), 7)} · {item.active ? "Active" : "Off"}</span></div>
-                      <div className="row-actions"><button onClick={() => loadRequestIntoForm(item)}><ArrowUpRight /></button><button onClick={() => handleDeleteOnChain(item.id)}><Trash2 /></button></div>
+                      <div>
+                        <strong>{item.label}</strong>
+                        <span>{formatAtomicAmount(BigInt(item.amount), 7)} · {item.memo ?? "No memo"}</span>
+                      </div>
+                      <div className="row-actions">
+                        <span className={`row-badge ${item.active ? "on" : "off"}`}>{item.active ? "Active" : "Paused"}</span>
+                        <button title="Load into form" aria-label="Load into form" onClick={() => loadRequestIntoForm(item)}><ArrowUpRight /></button>
+                        <button title="Delete request" aria-label="Delete request" onClick={() => handleDeleteOnChain(item.id)}><Trash2 /></button>
+                      </div>
                     </article>
                   ))}
                 </div>
