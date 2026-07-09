@@ -366,10 +366,19 @@ export default function Home() {
       <aside className="sidebar">
         <div className="brand-mark"><Zap className="h-5 w-5" /></div>
         <nav aria-label="Primary navigation">
-          <a href="#workspace" className="nav-item active" aria-label="Workspace"><LayoutGrid /></a>
-          <a href="#registry" className="nav-item" aria-label="Registry"><Search /></a>
+          <a href="#workspace" className="nav-item active" aria-label="Workspace">
+            <LayoutGrid />
+            <span>Workspace</span>
+          </a>
+          <a href="#registry" className="nav-item" aria-label="Registry">
+            <Search />
+            <span>Registry</span>
+          </a>
         </nav>
-        <button className="nav-item" onClick={handleConnect} aria-label="Connect wallet"><Wallet /></button>
+        <button className="nav-item" onClick={handleConnect} aria-label="Connect wallet">
+          <Wallet />
+          <span>Wallet</span>
+        </button>
       </aside>
 
       <div className="app-content">

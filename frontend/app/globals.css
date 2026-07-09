@@ -34,6 +34,7 @@ button:disabled { cursor: not-allowed; opacity: .48; }
 .sidebar nav { display: flex; flex: 1; flex-direction: column; gap: 10px; margin-top: 44px; }
 .nav-item { width: 42px; height: 42px; display: grid; place-items: center; border: 0; border-radius: 12px; background: transparent; color: #7e8494; transition: .18s ease; }
 .nav-item svg { width: 19px; height: 19px; }
+.nav-item span { display: none; }
 .nav-item:hover, .nav-item.active { color: white; background: rgba(255,255,255,.1); }
 .app-content { grid-column: 2; min-width: 0; }
 
@@ -150,7 +151,8 @@ footer span { display: flex; align-items: center; gap: 7px; }
   .sidebar { position: fixed; inset: auto 12px 12px; width: auto; height: 58px; padding: 8px 12px; flex-direction: row; border-radius: 16px; box-shadow: 0 10px 30px rgba(21,24,35,.3); }
   .brand-mark { width: 40px; height: 40px; }
   .sidebar nav { flex: 1; flex-direction: row; justify-content: center; margin: 0; }
-  .nav-item { width: 40px; height: 40px; }
+  .nav-item { width: auto; min-width: 40px; height: 40px; padding: 0 11px; gap: 7px; }
+  .nav-item span { display: inline; font: 600 10px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
   .app-content { min-width: 0; }
   .topbar { height: auto; min-height: 66px; padding: 12px 18px; }
   .contract-state, .network-pill { display: none; }
