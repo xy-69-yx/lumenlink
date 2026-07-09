@@ -49,6 +49,8 @@ button:disabled { cursor: not-allowed; opacity: .48; }
 .kicker { display: block; margin-bottom: 9px; color: var(--violet); font: 600 11px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .12em; }
 .page-heading h1 { margin: 0; font-size: clamp(32px, 4vw, 48px); line-height: 1.03; letter-spacing: -.045em; }
 .page-heading p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.hero-chip { display: inline-flex; align-items: center; padding: 7px 11px; border: 1px solid #dde0e4; border-radius: 999px; background: #fff; color: #4b5158; font: 600 10px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
 .new-request, .contract-copy { display: inline-flex; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px; background: white; color: #30343a; font-size: 13px; font-weight: 600; box-shadow: 0 2px 7px rgba(16,18,24,.03); }
 .new-request:hover, .contract-copy:hover { border-color: #bcb5ec; color: var(--violet); }
 

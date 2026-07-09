@@ -391,6 +391,11 @@ export default function Home() {
               <span className="kicker">Payment request</span>
               <h1>{editingRequestId ? `Edit request #${editingRequestId}` : "Create a payment link"}</h1>
               <p>Set payment details, check preview, then share or save on-chain.</p>
+              <div className="hero-chips">
+                <span className="hero-chip">Testnet ready</span>
+                <span className="hero-chip">QR + link</span>
+                <span className="hero-chip">On-chain registry</span>
+              </div>
             </div>
             <button
               className="new-request"
