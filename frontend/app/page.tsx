@@ -503,7 +503,11 @@ export default function Home() {
 
           <section id="registry" className="registry-section">
             <div className="registry-heading">
-              <div><span className="kicker">Contract registry</span><h2>Find saved requests</h2></div>
+              <div>
+                <span className="kicker">Contract registry</span>
+                <h2>Find saved requests</h2>
+                <p>Search one request or load the requests owned by a wallet address.</p>
+              </div>
               <button className="contract-copy" onClick={() => copyToClipboard(contractAddress, "contract ID")}><Copy className="h-4 w-4" /> {contractAddress.slice(0, 12)}…</button>
             </div>
             <div className="registry-tools">
@@ -511,7 +515,7 @@ export default function Home() {
                 <Field label="Request ID">
                   <div className="input-action"><Input value={requestId} onChange={(event) => setRequestId(event.target.value)} /><Button onClick={handleLookupRequest} disabled={lookup.status === "loading"}>{lookup.status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />} Find</Button></div>
                 </Field>
-                <p className="tool-status">{lookup.message || "Enter an on-chain request ID."}</p>
+                <p className="tool-status">{lookup.message || "Enter an on-chain request ID to open, edit, or delete it."}</p>
                 {lookup.request ? (
                   <article className="request-row featured">
                     <div className="request-id">#{lookup.request.id.toString()}</div>
@@ -524,9 +528,9 @@ export default function Home() {
                 <Field label="Owner address">
                   <div className="input-action"><Input value={ownerAddress} onChange={(event) => setOwnerAddress(event.target.value)} placeholder="G..." /><Button onClick={handleListRequests} disabled={listing.status === "loading"}>{listing.status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Load</Button></div>
                 </Field>
-                <p className="tool-status">{listing.message || "Load requests for a wallet."}</p>
+                <p className="tool-status">{listing.message || "Use the wallet address that created the requests you want to review."}</p>
                 <div className="request-list">
-                  {listing.requests.length === 0 ? <div className="empty-state">No requests loaded.</div> : null}
+                  {listing.requests.length === 0 ? <div className="empty-state">No owner requests loaded yet.</div> : null}
                   {listing.requests.map((item) => (
                     <article className="request-row" key={item.id.toString()}>
                       <div className="request-id">#{item.id.toString()}</div>

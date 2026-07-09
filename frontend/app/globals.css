@@ -112,6 +112,7 @@ button.bg-transparent { color: var(--muted) !important; }
 .registry-section { margin-top: 22px; padding: 28px; scroll-margin-top: 92px; }
 .registry-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 23px; border-bottom: 1px solid var(--soft-line); }
 .registry-heading h2 { margin: 0; font-size: 24px; letter-spacing: -.03em; }
+.registry-heading p { margin: 10px 0 0; color: var(--muted); font-size: 13px; max-width: 520px; }
 .contract-copy { font: 500 11px var(--font-mono); }
 .registry-tools { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; padding-top: 24px; }
 .owner-box { padding-left: 28px; border-left: 1px solid var(--soft-line); }
