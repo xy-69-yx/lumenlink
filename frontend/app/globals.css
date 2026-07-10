@@ -142,6 +142,7 @@ button.bg-transparent { color: var(--muted) !important; }
 
 footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 3px 0; color: #92989f; font: 500 10px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
 footer span { display: flex; align-items: center; gap: 7px; }
+footer span:last-child { color: #6f757d; }
 
 @media (max-width: 1050px) {
   .workspace-grid { grid-template-columns: 1fr; }

@@ -566,7 +566,10 @@ export default function Home() {
             </div>
           </section>
 
-          <footer><span><Check className="h-4 w-4" /> {copied ? `Copied ${copied}` : "Ready"}</span><span>{networkPassphrase.split(" ; ")[0]}</span></footer>
+          <footer>
+            <span><Check className="h-4 w-4" /> {copied ? `Copied ${copied}` : "Ready to share"}</span>
+            <span>{networkPassphrase.split(" ; ")[0]} · Contract v{contractVersion}</span>
+          </footer>
         </div>
       </div>
     </main>
