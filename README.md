@@ -26,6 +26,23 @@ LumenLink lets you create, preview, save, look up, update, and delete payment re
 - Demos where you want a polished payment-link flow with on-chain storage.
 - Internal tools that need a simple registry for payment requests.
 
+## User Feedback
+
+The table below tracks the UI/UX feedback collected during the recent polish pass and the exact commit that addressed each item.
+
+| Feedback | Fix applied | Commit ID |
+| --- | --- | --- |
+| The page opened too abruptly without a quick orientation. | Added summary chips under the hero so users can see the app scope at a glance. | `b49480d` |
+| Wallet connection state was too hidden. | Added a visible wallet status chip in the top bar. | `5d860ed` |
+| The preview card needed clearer purpose. | Added helper copy that explains scanning and copy/share behavior. | `88cee35` |
+| Amount, asset, and decimals fields felt under-explained. | Added inline hints for the payment input fields. | `6118507` |
+| Empty registry states felt dead and confusing. | Rewrote the registry helper text and empty states to guide the next step. | `9ca1bed` |
+| Request rows were hard to scan quickly. | Added active/paused badges and clearer row actions. | `3c50b5c` |
+| Mobile navigation was icon-only and vague. | Added labels to the sidebar nav for clearer mobile use. | `f6d973c` |
+| Keyboard and hover affordances were too subtle. | Strengthened focus rings and hover states across controls. | `d7d5c28` |
+| The main wallet button did not describe its state clearly. | Renamed the CTA so it now says what it does in each wallet state. | `400ebbb` |
+| The footer felt like unused space. | Turned the footer into a live status line with network and version info. | `be7ae39` |
+
 ## Screenshots
 
 Place screenshots here once they are ready.
