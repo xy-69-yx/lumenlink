@@ -336,7 +336,25 @@ export async function createOnChainRequest(
   draft: RequestDraft
 ) {
   const client = buildContractClient(owner);
-  const requestInput = toRequestInput(draft, owner);
+  try {
+    const initTx = await client.initialize({ admin: owner });
+    const initSent = await initTx.signAndSend();
+    if (initSent.result.isErr()) {
+      const message = initSent.result.unwrapErr().message;
+      if (message !== "AlreadyInitialized") {
+        throw new Error(message);
+      }
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!message.includes("AlreadyInitialized") && !message.includes("Error(Contract, #2)")) {
+      throw error;
+    }
+  }
+
+  const requestInput = draft.expiresInLedgers.trim()
+    ? toRequestInput(draft, owner, (await makeRpcServer().getLatestLedger()).sequence)
+    : toRequestInput(draft, owner);
   const tx = await client.create_request({
     owner,
     input: requestInput,
