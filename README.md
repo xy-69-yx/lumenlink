@@ -183,6 +183,6 @@ If they are not set, the app falls back to the testnet values listed above.
 
 ## Notes
 
-- The browser app uses Stellar Wallets Kit to support multiple wallets, including Freighter, Lobstr, xBull, Albedo, Rabet, Hana, Ledger, Trezor, and WalletConnect.
+- The browser app uses Stellar Wallets Kit to support multiple wallets from one integration, including Lobstr, xBull, Albedo, Rabet, Hana, Ledger, Trezor, and WalletConnect.
 - The default contract target is Stellar testnet.
 - The live app UI is designed to work on desktop and mobile.

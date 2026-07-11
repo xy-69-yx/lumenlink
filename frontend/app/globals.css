@@ -45,6 +45,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .network-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 11px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
 .network-pill i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,106,.12); }
 .contract-state { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 12px; }
+.build-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid #ece3d2; border-radius: 999px; background: #fffaf2; color: #8a5a17; font: 600 11px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
 .wallet-chip { display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid #dfe2e5; border-radius: 999px; background: #fff; color: #56606a; font: 600 11px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
 .wallet-chip i { width: 6px; height: 6px; border-radius: 50%; background: #b7bcc2; box-shadow: 0 0 0 3px rgba(183,188,194,.15); }
 .wallet-chip.connected { border-color: #cde9dc; color: #11845b; }
@@ -159,7 +160,7 @@ footer span:last-child { color: #6f757d; }
   .nav-item span { display: inline; font: 600 10px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
   .app-content { min-width: 0; }
   .topbar { height: auto; min-height: 66px; padding: 12px 18px; }
-  .contract-state, .network-pill { display: none; }
+  .contract-state, .network-pill, .build-pill { display: none; }
   .page-wrap { padding: 30px 16px 92px; }
   .page-heading { align-items: start; }
   .page-heading p { max-width: 330px; }

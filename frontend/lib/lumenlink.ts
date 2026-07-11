@@ -4,6 +4,13 @@ import {
 import { defaultModules } from "@creit.tech/stellar-wallets-kit/modules/utils";
 import { Networks } from "@creit.tech/stellar-wallets-kit/types";
 import {
+  Asset,
+  Horizon,
+  Memo,
+  Operation,
+  TransactionBuilder,
+} from "@stellar/stellar-sdk";
+import {
   rpc,
   type Request as OnChainRequest,
   type RequestInput,
@@ -221,6 +228,41 @@ export function buildPaymentUri(draft: RequestDraft) {
   return `web+stellar:pay?${params.toString()}`;
 }
 
+export function buildPaymentPageUrl(draft: RequestDraft) {
+  if (!draft.recipient.trim()) {
+    return "";
+  }
+
+  const params = new URLSearchParams();
+  params.set("destination", draft.recipient.trim());
+  params.set("amount", draft.amount.trim());
+  params.set("asset_kind", draft.asset.kind);
+  if (draft.asset.kind === "credit") {
+    params.set("asset_code", draft.asset.code.trim());
+    params.set("asset_issuer", draft.asset.issuer.trim());
+  }
+  if (draft.memo.trim()) {
+    params.set("memo", draft.memo.trim());
+  }
+  if (draft.label.trim()) {
+    params.set("label", draft.label.trim());
+  }
+  if (draft.description.trim()) {
+    params.set("description", draft.description.trim());
+  }
+  if (draft.message.trim()) {
+    params.set("message", draft.message.trim());
+  }
+  if (draft.expiresInLedgers.trim()) {
+    params.set("expires_in_ledgers", draft.expiresInLedgers.trim());
+  }
+  return `/pay?${params.toString()}`;
+}
+
+export function buildRequestPaymentPageUrl(id: bigint) {
+  return `/pay?id=${id.toString()}`;
+}
+
 export function toRequestInput(
   draft: RequestDraft,
   recipient: string,
@@ -294,6 +336,53 @@ export async function readContractVersion() {
   return Number(tx.result);
 }
 
+export async function initializeContract(owner: string) {
+  const client = buildContractClient(owner);
+
+  try {
+    const initTx = await client.initialize({ admin: owner });
+    const initSent = await initTx.signAndSend();
+
+    if (initSent.result.isErr()) {
+      const message = initSent.result.unwrapErr().message;
+      if (message === "AlreadyInitialized") {
+        return {
+          ok: true as const,
+          initialized: false as const,
+          message: "Contract already initialized",
+          hash: initSent.sendTransactionResponse?.hash ?? "",
+        };
+      }
+
+      return {
+        ok: false as const,
+        initialized: false as const,
+        message,
+        hash: initSent.sendTransactionResponse?.hash ?? "",
+      };
+    }
+
+    return {
+      ok: true as const,
+      initialized: true as const,
+      message: "Contract initialized",
+      hash: initSent.sendTransactionResponse?.hash ?? "",
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (message.includes("AlreadyInitialized") || message.includes("Error(Contract, #2)")) {
+      return {
+        ok: true as const,
+        initialized: false as const,
+        message: "Contract already initialized",
+        hash: "",
+      };
+    }
+
+    throw error;
+  }
+}
+
 export async function readRequestById(id: bigint) {
   const client = buildContractClient();
   const tx = await client.get_request({ id });
@@ -336,20 +425,13 @@ export async function createOnChainRequest(
   draft: RequestDraft
 ) {
   const client = buildContractClient(owner);
-  try {
-    const initTx = await client.initialize({ admin: owner });
-    const initSent = await initTx.signAndSend();
-    if (initSent.result.isErr()) {
-      const message = initSent.result.unwrapErr().message;
-      if (message !== "AlreadyInitialized") {
-        throw new Error(message);
-      }
-    }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    if (!message.includes("AlreadyInitialized") && !message.includes("Error(Contract, #2)")) {
-      throw error;
-    }
+  const initResult = await initializeContract(owner);
+  if (!initResult.ok) {
+    return {
+      ok: false as const,
+      message: initResult.message,
+      hash: initResult.hash,
+    };
   }
 
   const requestInput = draft.expiresInLedgers.trim()
@@ -431,6 +513,48 @@ export async function requireWalletAddress() {
   }
   const { address } = await StellarWalletsKit.getAddress();
   return address;
+}
+
+export async function submitStellarPayment(
+  payer: string,
+  draft: RequestDraft
+) {
+  const destination = draft.recipient.trim();
+  if (!destination) throw new Error("Payment destination is missing");
+  if (payer.trim() === destination) throw new Error("You cannot pay your own wallet");
+
+  const amount = draft.amount.trim();
+  if (!amount || parseAtomicAmount(amount, 7) <= BigInt(0)) {
+    throw new Error("Payment amount must be greater than zero");
+  }
+
+  const server = new Horizon.Server("https://horizon-testnet.stellar.org");
+  const account = await server.loadAccount(payer);
+  const fee = await server.fetchBaseFee();
+  const asset = draft.asset.kind === "native"
+    ? Asset.native()
+    : new Asset(draft.asset.code.trim(), draft.asset.issuer.trim());
+
+  const builder = new TransactionBuilder(account, {
+    fee: fee.toString(),
+    networkPassphrase: NETWORK_PASSPHRASE,
+  }).addOperation(Operation.payment({ destination, asset, amount }));
+
+  if (draft.memo.trim()) {
+    builder.addMemo(Memo.text(draft.memo.trim()));
+  }
+
+  const transaction = builder.setTimeout(180).build();
+  const { signedTxXdr } = await signTransactionWithKit(transaction.toXDR(), {
+    address: payer,
+    networkPassphrase: NETWORK_PASSPHRASE,
+  });
+  const signedTransaction = TransactionBuilder.fromXDR(
+    signedTxXdr,
+    NETWORK_PASSPHRASE
+  );
+  const result = await server.submitTransaction(signedTransaction);
+  return { hash: result.hash };
 }
 
 export const contractAddress = CONTRACT_ID;
