@@ -45,11 +45,14 @@ The table below tracks the UI/UX feedback collected during the recent polish pas
 
 ## Screenshots
 
-Place screenshots here once they are ready.
 
-- `docs/screenshots/home.png` - main workspace and preview
-- `docs/screenshots/registry.png` - on-chain request lookup and listing
-- `docs/screenshots/mobile.png` - mobile layout
+<img width="1876" height="1005" alt="image" src="https://github.com/user-attachments/assets/313a0578-6a99-4f68-85a8-65746eb5f134" />
+<h2>Payment Form</h2>
+<img width="1876" height="1005" alt="image" src="https://github.com/user-attachments/assets/d80d8ac8-2798-4f27-982f-794198584131" />
+<h2>Link Generation</h2>
+<img width="1876" height="1005" alt="image" src="https://github.com/user-attachments/assets/adba4ff3-cf38-4635-8d38-a066aee2e762" />
+<h2>Payment Page</h2>
+
 
 ## Project Structure
 
