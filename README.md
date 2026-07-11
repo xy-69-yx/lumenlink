@@ -8,8 +8,8 @@ LumenLink lets you create, preview, save, look up, update, and delete payment re
 
 ## Live Links
 
-- Live app: `ADD_LIVE_LINK_HERE`
-- Demo video: `ADD_DEMO_VIDEO_LINK_HERE`
+- Live app: https://lumenlink.vercel.app/
+- Demo video: https://drive.google.com/file/d/1ddkKMPZn6yJ-z8TnKaBEAViER5Db0wZO/view?usp=sharing
 
 ## What It Does
 
