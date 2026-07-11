@@ -21,6 +21,13 @@ jobs:
       - name: Install Stellar CLI
         uses: stellar/stellar-cli@v27.0.0
 
+      - name: Restore vendored Soroban host
+        run: |
+          mkdir -p vendor/soroban-env-host
+          curl -A 'GitHub Actions' -fsSL https://crates.io/api/v1/crates/soroban-env-host/26.1.3/download \
+            -o /tmp/soroban-env-host.crate
+          tar -xzf /tmp/soroban-env-host.crate -C vendor/soroban-env-host --strip-components=1
+
       - name: Build contract
         run: ./scripts/compile.sh
 
@@ -35,13 +42,13 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm install
 
       - name: Type check
         working-directory: frontend
