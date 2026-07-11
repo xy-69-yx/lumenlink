@@ -1,0 +1,4 @@
+.env
+target
+vendor 
+node_modules
