@@ -155,7 +155,7 @@ export default function Home() {
   const [contractStatus, setContractStatus] = useState<string>("Loading contract…");
   const [copied, setCopied] = useState<string>("");
   const [isPending, startTransition] = useTransition();
-  const [saveStatus, setSaveStatus] = useState<string>("Connect Freighter to write on-chain.");
+  const [saveStatus, setSaveStatus] = useState<string>("Connect a wallet to write on-chain.");
   const [saveTxHash, setSaveTxHash] = useState<string>("");
   const [lookup, setLookup] = useState<RequestLookup>({
     status: "idle",
@@ -202,7 +202,7 @@ export default function Home() {
       const nextWallet = await connectWallet();
       setWallet(nextWallet);
       setOwnerAddress(nextWallet.address);
-      setContractStatus("Freighter connected");
+      setContractStatus("Wallet connected");
     } catch (error) {
       setContractStatus(error instanceof Error ? error.message : "Wallet connection failed");
     }
@@ -214,7 +214,7 @@ export default function Home() {
         const nextWallet = await connectWallet();
         setWallet(nextWallet);
         setOwnerAddress(nextWallet.address);
-        setContractStatus("Freighter connected");
+        setContractStatus("Wallet connected");
         return nextWallet;
       })();
 
@@ -245,7 +245,7 @@ export default function Home() {
         const nextWallet = await connectWallet();
         setWallet(nextWallet);
         setOwnerAddress(nextWallet.address);
-        setContractStatus("Freighter connected");
+        setContractStatus("Wallet connected");
         return nextWallet;
       })();
 
@@ -392,11 +392,11 @@ export default function Home() {
             <span className="contract-state">v{contractVersion} · {contractStatus}</span>
             <span className={`wallet-chip ${wallet.connected ? "connected" : ""}`}>
               <i />
-              {wallet.connected ? `${wallet.address.slice(0, 6)}…${wallet.address.slice(-4)}` : "Freighter idle"}
+              {wallet.connected ? `${wallet.address.slice(0, 6)}…${wallet.address.slice(-4)}` : "Wallet kit idle"}
             </span>
             <Button onClick={handleConnect} variant={wallet.connected ? "secondary" : "primary"}>
               <Wallet className="h-4 w-4" />
-              {wallet.connected ? `Switch wallet · ${wallet.address.slice(0, 5)}…${wallet.address.slice(-4)}` : "Connect Freighter"}
+              {wallet.connected ? `Switch wallet · ${wallet.address.slice(0, 5)}…${wallet.address.slice(-4)}` : "Connect wallet"}
             </Button>
           </div>
         </header>

@@ -1,4 +1,8 @@
-import { requestAccess, signAuthEntry, signTransaction } from "@stellar/freighter-api";
+import {
+  StellarWalletsKit,
+} from "@creit.tech/stellar-wallets-kit/sdk";
+import { defaultModules } from "@creit.tech/stellar-wallets-kit/modules/utils";
+import { Networks } from "@creit.tech/stellar-wallets-kit/types";
 import {
   rpc,
   type Request as OnChainRequest,
@@ -16,6 +20,63 @@ const NETWORK_PASSPHRASE =
 const RPC_URL =
   process.env.NEXT_PUBLIC_LUMENLINK_RPC_URL ??
   "https://soroban-testnet.stellar.org";
+
+let walletKitReady = false;
+
+function ensureWalletKit() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (!walletKitReady) {
+    StellarWalletsKit.init({
+      network: Networks.TESTNET,
+      modules: defaultModules(),
+    });
+    walletKitReady = true;
+  }
+}
+
+async function signTransactionWithKit(
+  xdr: string,
+  opts?: { networkPassphrase?: string; address?: string }
+) {
+  ensureWalletKit();
+  if (typeof window === "undefined") {
+    throw new Error("Wallet kit is only available in the browser");
+  }
+
+  const address = opts?.address ?? (await StellarWalletsKit.getAddress()).address;
+  const { signedTxXdr, signerAddress } = await StellarWalletsKit.signTransaction(xdr, {
+    networkPassphrase: opts?.networkPassphrase ?? NETWORK_PASSPHRASE,
+    address,
+  });
+  return {
+    signedTxXdr,
+    signerAddress,
+  };
+}
+
+async function signAuthEntryWithKit(
+  authEntry: string,
+  opts?: { networkPassphrase?: string; address?: string }
+) {
+  ensureWalletKit();
+  if (typeof window === "undefined") {
+    throw new Error("Wallet kit is only available in the browser");
+  }
+
+  const address = opts?.address ?? (await StellarWalletsKit.getAddress()).address;
+  const { signedAuthEntry, signerAddress } = await StellarWalletsKit.signAuthEntry(authEntry, {
+    networkPassphrase: opts?.networkPassphrase ?? NETWORK_PASSPHRASE,
+    address,
+  });
+  return {
+    signedAuthEntry,
+    signerAddress,
+    error: undefined,
+  };
+}
 
 export const LUMENLINK = {
   contractId: CONTRACT_ID,
@@ -76,19 +137,15 @@ export function buildContractClient(publicKey?: string) {
     rpcUrl: RPC_URL,
     publicKey,
     signTransaction: async (xdr, opts) =>
-      signTransaction(xdr, {
+      signTransactionWithKit(xdr, {
         networkPassphrase: opts?.networkPassphrase ?? NETWORK_PASSPHRASE,
         address: opts?.address ?? publicKey,
       }),
     signAuthEntry: async (entryXdr, opts) =>
-      signAuthEntry(entryXdr, {
+      signAuthEntryWithKit(entryXdr, {
         networkPassphrase: opts?.networkPassphrase ?? NETWORK_PASSPHRASE,
         address: opts?.address ?? publicKey,
-      }).then((response) => ({
-        signedAuthEntry: response.signedAuthEntry ?? "",
-        signerAddress: response.signerAddress,
-        error: response.error,
-      })),
+      }),
   });
 }
 
@@ -97,11 +154,12 @@ export function makeRpcServer() {
 }
 
 export async function connectWallet(): Promise<WalletState> {
-  const { address, error } = await requestAccess();
-  if (error) {
-    throw new Error(error.message);
+  ensureWalletKit();
+  if (typeof window === "undefined") {
+    throw new Error("Wallet kit is only available in the browser");
   }
 
+  const { address } = await StellarWalletsKit.authModal();
   return {
     address,
     connected: true,
@@ -349,10 +407,11 @@ export async function deleteOnChainRequest(actor: string, id: bigint) {
 }
 
 export async function requireWalletAddress() {
-  const { address, error } = await requestAccess();
-  if (error) {
-    throw new Error(error.message);
+  ensureWalletKit();
+  if (typeof window === "undefined") {
+    throw new Error("Wallet kit is only available in the browser");
   }
+  const { address } = await StellarWalletsKit.getAddress();
   return address;
 }
 

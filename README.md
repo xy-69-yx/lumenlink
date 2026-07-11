@@ -1,6 +1,6 @@
 # LumenLink
 
-Modern Stellar payment requests with a Soroban-backed registry and a Freighter-powered frontend.
+Modern Stellar payment requests with a Soroban-backed registry and a Stellar Wallets Kit-powered frontend.
 
 ## Project Overview
 
@@ -82,7 +82,7 @@ Place screenshots here once they are ready.
 - Next.js 16
 - React 19
 - Tailwind CSS 4
-- Freighter API for wallet signing
+- Stellar Wallets Kit for multi-wallet signing
 - Stellar SDK for payment-link and contract interactions
 - Soroban smart contract for request storage
 
@@ -183,6 +183,6 @@ If they are not set, the app falls back to the testnet values listed above.
 
 ## Notes
 
-- The browser app expects the Freighter extension for signing.
+- The browser app uses Stellar Wallets Kit to support multiple wallets, including Freighter, Lobstr, xBull, Albedo, Rabet, Hana, Ledger, Trezor, and WalletConnect.
 - The default contract target is Stellar testnet.
 - The live app UI is designed to work on desktop and mobile.
