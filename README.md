@@ -79,7 +79,7 @@ This section spells out the frontend, CI, and deploy evidence that was missing f
 | --- | --- | --- |
 | Contract CI | `.github/workflows/ci.yml` | Rust toolchain setup, vendored Soroban host restore, contract build via `./scripts/compile.sh`. |
 | Frontend CI | `.github/workflows/ci.yml` | `npm ci`, `npm run build`, and `npm exec tsc -- --noEmit` under `frontend/`. |
-| Vercel deploy config | `frontend/vercel.json` | Tells Vercel to use the Next.js app, install with `npm ci`, and build with `npm run build`. |
+| Frontend Docker config | `frontend/Dockerfile` | Builds a standalone Next.js image with `npm ci` and `npm run build`. |
 
 ### Deployment Helpers
 
@@ -87,7 +87,7 @@ This section spells out the frontend, CI, and deploy evidence that was missing f
 | --- | --- |
 | `scripts/compile.sh` | Builds the Soroban contract WASM. |
 | `scripts/deploy.sh` | Uploads and deploys the contract using `stellar contract deploy`. |
-| `frontend/vercel.json` | Deployment config for the frontend on Vercel. |
+| `frontend/Dockerfile` | Deployment image for the frontend. |
 
 ## Screenshots
 
@@ -120,10 +120,10 @@ This section spells out the frontend, CI, and deploy evidence that was missing f
 ├── frontend/
 │   ├── app/
 │   │   └── pay/
+│   ├── Dockerfile
 │   ├── lib/
 │   ├── public/
 │   ├── src/contracts/lumenlink_registry/
-│   ├── vercel.json
 │   ├── package.json
 │   └── next.config.ts
 └── scripts/
@@ -158,6 +158,14 @@ Then open the local app in your browser.
 cd frontend
 npm run build
 npm run lint
+```
+
+### Docker
+
+```bash
+cd frontend
+docker build -t lumenlink-frontend .
+docker run --rm -p 3000:3000 lumenlink-frontend
 ```
 
 ## Contract Workflow
