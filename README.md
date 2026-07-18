@@ -78,7 +78,7 @@ This section spells out the frontend, CI, and deploy evidence that was missing f
 | Workflow | File | What runs |
 | --- | --- | --- |
 | Contract CI | `.github/workflows/ci.yml` | Rust toolchain setup, vendored Soroban host restore, contract build via `./scripts/compile.sh`. |
-| Frontend CI | `.github/workflows/ci.yml` | `npm ci`, `npm run build`, and `npm exec tsc -- --noEmit` under `frontend/`. |
+| Frontend CI | `.github/workflows/ci.yml` | `npm install`, `npm run build`, and `npm exec tsc -- --noEmit` under `frontend/`. |
 | Frontend Docker config | `frontend/Dockerfile` | Builds a standalone Next.js image with `npm ci` and `npm run build`. |
 
 ### Deployment Helpers
