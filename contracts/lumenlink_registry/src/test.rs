@@ -4,6 +4,7 @@ extern crate std;
 
 use super::*;
 use soroban_sdk::{testutils::Address as _, Address, Env, String};
+use std::format;
 
 fn setup() -> (Env, Address, Address, Address) {
     let env = Env::default();
@@ -20,6 +21,18 @@ fn base_request(env: &Env, recipient: Address) -> RequestInput {
     RequestInput {
         recipient,
         asset: AssetSpec::Native,
+        amount: 1_250_000,
+        memo: Some(String::from_str(env, "Invoice-01")),
+        label: String::from_str(env, "Design retainer"),
+        description: String::from_str(env, "First milestone payment for June work"),
+        expires_at_ledger: Some(env.ledger().sequence() + 100),
+    }
+}
+
+fn credit_request(env: &Env, recipient: Address, code: &str) -> RequestInput {
+    RequestInput {
+        recipient,
+        asset: AssetSpec::Credit(String::from_str(env, code), Address::generate(env)),
         amount: 1_250_000,
         memo: Some(String::from_str(env, "Invoice-01")),
         label: String::from_str(env, "Design retainer"),
@@ -106,6 +119,92 @@ fn validate_input_rules() {
     );
 
     let _ = owner;
+}
+
+#[test]
+fn reject_invalid_asset_code_and_expiry() {
+    let (env, _admin, owner, recipient) = setup();
+
+    let mut invalid_asset = credit_request(&env, recipient.clone(), "");
+    assert_eq!(
+        Contract::create_request(env.clone(), owner.clone(), invalid_asset.clone()),
+        Err(Error::InvalidAssetCode)
+    );
+
+    invalid_asset.asset = AssetSpec::Credit(
+        String::from_str(&env, "TOO-LONG-CODE"),
+        Address::generate(&env),
+    );
+    assert_eq!(
+        Contract::create_request(env.clone(), owner.clone(), invalid_asset),
+        Err(Error::InvalidAssetCode)
+    );
+
+    let contract_id = env.register(Contract, ());
+    let client = ContractClient::new(&env, &contract_id);
+    client.initialize(&owner);
+
+    let mut expired = base_request(&env, recipient);
+    expired.expires_at_ledger = Some(env.ledger().sequence());
+    assert_eq!(
+        Contract::validate_input(&env, &expired),
+        Err(Error::InvalidExpiry)
+    );
+}
+
+#[test]
+fn management_requires_owner_or_admin() {
+    let (env, admin, owner, recipient) = setup();
+    let contract_id = env.register(Contract, ());
+    let client = ContractClient::new(&env, &contract_id);
+    client.initialize(&admin);
+
+    let created = client.create_request(&owner, &base_request(&env, recipient));
+    let outsider = Address::generate(&env);
+
+    assert_eq!(
+        env.as_contract(&contract_id, || {
+            Contract::update_request(
+                env.clone(),
+                outsider.clone(),
+                created.id,
+                RequestPatch {
+                    recipient: None,
+                    amount: Some(2_000_000),
+                    memo: None,
+                    label: None,
+                    description: None,
+                    expires_at_ledger: None,
+                    active: None,
+                },
+            )
+        }),
+        Err(Error::Unauthorized)
+    );
+
+    assert_eq!(
+        env.as_contract(&contract_id, || Contract::delete_request(env.clone(), outsider, created.id)),
+        Err(Error::Unauthorized)
+    );
+}
+
+#[test]
+fn list_requests_caps_page_size() {
+    let (env, admin, owner, recipient) = setup();
+    let contract_id = env.register(Contract, ());
+    let client = ContractClient::new(&env, &contract_id);
+    client.initialize(&admin);
+
+    for idx in 0..60 {
+        let mut request = base_request(&env, recipient.clone());
+        request.label = String::from_str(&env, &format!("Request-{idx}"));
+        client.create_request(&owner, &request);
+    }
+
+    let listed = client.list_requests(&owner, &0, &100);
+    assert_eq!(listed.len(), 50);
+    assert_eq!(listed.get(0).unwrap().label, String::from_str(&env, "Request-0"));
+    assert_eq!(listed.get(49).unwrap().label, String::from_str(&env, "Request-49"));
 }
 
 #[test]

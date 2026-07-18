@@ -233,6 +233,16 @@ The contract workspace includes snapshot-backed tests for:
 
 Run contract tests from the root workspace with `cargo test`. The repository includes snapshots under `contracts/lumenlink_registry/test_snapshots/`.
 
+## Test Results
+
+Validated on July 18, 2026:
+
+| Command | Result |
+| --- | --- |
+| `cargo test` | Passed, 7 contract tests green. |
+| `cd frontend && npm run build` | Passed. |
+| `cd frontend && npm run lint` | Passed. |
+
 ## Frontend Configuration
 
 The frontend uses these optional environment variables:
