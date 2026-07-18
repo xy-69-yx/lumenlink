@@ -43,6 +43,52 @@ The table below tracks the UI/UX feedback collected during the recent polish pas
 | The main wallet button did not describe its state clearly. | Renamed the CTA so it now says what it does in each wallet state. | `400ebbb` |
 | The footer felt like unused space. | Turned the footer into a live status line with network and version info. | `be7ae39` |
 
+## Revision Coverage
+
+This section spells out the frontend, CI, and deploy evidence that was missing from the judged subset.
+
+### Frontend Integration Files
+
+| File | What it does |
+| --- | --- |
+| `frontend/app/page.tsx` | Main request-builder UI. Connects wallet, creates an on-chain request, and generates a share link. |
+| `frontend/app/pay/page.tsx` | Server wrapper for payment links. Passes `searchParams` into the client payment page. |
+| `frontend/app/pay/payment-page-client.tsx` | Payment screen. Loads request data, connects payer wallet, and submits Stellar payment. |
+| `frontend/lib/lumenlink.ts` | Shared frontend bridge. Holds wallet kit setup, contract client, request helpers, payment URI builders, and payment submission logic. |
+| `frontend/src/contracts/lumenlink_registry/src/index.ts` | Generated Soroban bindings used by the frontend contract client. |
+| `frontend/app/layout.tsx` | Global metadata and font setup for the app shell. |
+| `frontend/app/globals.css` | App styling, layout, responsive behavior, and interaction states. |
+| `frontend/public/lumenlink-mark.svg` | Brand mark used across the UI. |
+
+### Contract And Frontend Function Match
+
+| Contract side | Frontend side |
+| --- | --- |
+| `version()` | `readContractVersion()` in `frontend/lib/lumenlink.ts` |
+| `initialize(admin)` | `initializeContract()` in `frontend/lib/lumenlink.ts` |
+| `create_request(owner, input)` | `createOnChainRequest()` in `frontend/lib/lumenlink.ts` and the main request form in `frontend/app/page.tsx` |
+| `get_request(id)` | `readRequestById()` in `frontend/lib/lumenlink.ts` and the payment page loader in `frontend/app/pay/payment-page-client.tsx` |
+| `list_requests(owner, start_after, limit)` | `readRequestsByOwner()` in `frontend/lib/lumenlink.ts` |
+| `update_request(actor, id, patch)` | `updateOnChainRequest()` in `frontend/lib/lumenlink.ts` |
+| `delete_request(actor, id)` | `deleteOnChainRequest()` in `frontend/lib/lumenlink.ts` |
+| Stellar payment transaction | `submitStellarPayment()` in `frontend/lib/lumenlink.ts` |
+
+### CI And CD Coverage
+
+| Workflow | File | What runs |
+| --- | --- | --- |
+| Contract CI | `.github/workflows/ci.yml` | Rust toolchain setup, vendored Soroban host restore, contract build via `./scripts/compile.sh`. |
+| Frontend CI | `.github/workflows/ci.yml` | `npm ci`, `npm run build`, and `npm exec tsc -- --noEmit` under `frontend/`. |
+| Vercel deploy config | `frontend/vercel.json` | Tells Vercel to use the Next.js app, install with `npm ci`, and build with `npm run build`. |
+
+### Deployment Helpers
+
+| File | What it does |
+| --- | --- |
+| `scripts/compile.sh` | Builds the Soroban contract WASM. |
+| `scripts/deploy.sh` | Uploads and deploys the contract using `stellar contract deploy`. |
+| `frontend/vercel.json` | Deployment config for the frontend on Vercel. |
+
 ## Screenshots
 
 
@@ -58,6 +104,9 @@ The table below tracks the UI/UX feedback collected during the recent polish pas
 
 ```text
 .
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 ├── Cargo.toml
 ├── Cargo.lock
 ├── contracts/
@@ -70,9 +119,11 @@ The table below tracks the UI/UX feedback collected during the recent polish pas
 │       └── test_snapshots/
 ├── frontend/
 │   ├── app/
+│   │   └── pay/
 │   ├── lib/
 │   ├── public/
 │   ├── src/contracts/lumenlink_registry/
+│   ├── vercel.json
 │   ├── package.json
 │   └── next.config.ts
 └── scripts/
