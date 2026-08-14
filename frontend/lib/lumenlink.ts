@@ -125,6 +125,13 @@ export type RequestList = {
   requests: OnChainRequest[];
 };
 
+export type LiveNetworkStats = {
+  totalRequestsCreated: number;
+  distinctUsers: number;
+  xlmFlowAtomic: bigint;
+  latestLedger: number;
+};
+
 export const EMPTY_DRAFT: RequestDraft = {
   recipient: "",
   amount: "250.00",
@@ -334,6 +341,58 @@ export async function readContractVersion() {
   const client = buildContractClient();
   const tx = await client.version();
   return Number(tx.result);
+}
+
+export async function readLiveNetworkStats(): Promise<LiveNetworkStats | null> {
+  try {
+    const server = makeRpcServer();
+    const latestLedger = (await server.getLatestLedger()).sequence;
+    const requests = [];
+    const batchSize = 12;
+    const scanLimit = 500;
+    let missStreak = 0;
+
+    for (let start = 1; start <= scanLimit && missStreak < 18; start += batchSize) {
+      const batchIds = Array.from({ length: batchSize }, (_, index) => BigInt(start + index));
+      const resolved = await Promise.all(
+        batchIds.map(async (id) => {
+          const result = await readRequestById(id);
+          return result.ok ? result.request : null;
+        })
+      );
+
+      let batchHits = 0;
+      for (const request of resolved) {
+        if (request) {
+          requests.push(request);
+          batchHits += 1;
+        }
+      }
+
+      if (batchHits === 0) {
+        missStreak += batchIds.length;
+      } else {
+        missStreak = 0;
+      }
+    }
+
+    const distinctUsers = new Set(requests.map((request) => request.owner)).size;
+    const xlmFlowAtomic = requests.reduce((sum, request) => {
+      if (request.asset.tag !== "Native") {
+        return sum;
+      }
+      return sum + BigInt(request.amount);
+    }, BigInt(0));
+
+    return {
+      totalRequestsCreated: requests.length,
+      distinctUsers,
+      xlmFlowAtomic,
+      latestLedger,
+    };
+  } catch {
+    return null;
+  }
 }
 
 export async function initializeContract(owner: string) {

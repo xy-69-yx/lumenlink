@@ -7,8 +7,10 @@ import {
   connectWallet,
   createOnChainRequest,
   EMPTY_DRAFT,
+  readLiveNetworkStats,
   networkPassphrase,
   readContractVersion,
+  type LiveNetworkStats,
   type RequestDraft,
   type WalletState,
 } from "../lib/lumenlink";
@@ -29,6 +31,7 @@ export default function Home() {
   const [wallet, setWallet] = useState<WalletState>({ address: "", connected: false, networkPassphrase });
   const [draft, setDraft] = useState<RequestDraft>(initialDraft);
   const [contractVersion, setContractVersion] = useState("…");
+  const [networkStats, setNetworkStats] = useState<LiveNetworkStats | null>(null);
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [shareLink, setShareLink] = useState("");
@@ -36,6 +39,25 @@ export default function Home() {
 
   useEffect(() => {
     readContractVersion().then((value) => setContractVersion(String(value))).catch(() => setContractVersion("offline"));
+  }, []);
+
+  useEffect(() => {
+    let alive = true;
+
+    async function refreshStats() {
+      const stats = await readLiveNetworkStats();
+      if (alive) {
+        setNetworkStats(stats);
+      }
+    }
+
+    refreshStats();
+    const timer = window.setInterval(refreshStats, 20000);
+
+    return () => {
+      alive = false;
+      window.clearInterval(timer);
+    };
   }, []);
 
   async function handleConnect() {
@@ -83,6 +105,20 @@ export default function Home() {
     window.setTimeout(() => setCopied(false), 1500);
   }
 
+  const formatCompact = (value: number) =>
+    new Intl.NumberFormat("en-US", {
+      notation: "compact",
+      maximumFractionDigits: 1,
+    }).format(value);
+
+  const formatXlm = (atomicValue: bigint) => {
+    const scale = BigInt(10) ** BigInt(7);
+    const whole = atomicValue / scale;
+    const fraction = (atomicValue % scale).toString().padStart(7, "0").replace(/0+$/, "");
+    const formatted = `${whole.toString()}${fraction ? `.${fraction}` : ""}`;
+    return `${formatted} XLM`;
+  };
+
   return (
     <main className="min-h-screen bg-[#f6f7f9] text-slate-950">
       <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -101,7 +137,7 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-6xl gap-12 px-5 py-14 lg:grid-cols-[.85fr_1.15fr] lg:py-20">
+      <div className="mx-auto grid max-w-6xl gap-12 px-5 py-12 lg:grid-cols-[.85fr_1.15fr] lg:py-16">
         <section className="pt-3">
           <p className="text-xs font-semibold uppercase tracking-[.25em] text-violet-600">Get paid on Stellar</p>
           <h1 className="mt-5 max-w-lg text-5xl font-semibold leading-[1.02] tracking-[-.05em] sm:text-6xl">Create a payment request in one minute.</h1>
@@ -153,6 +189,58 @@ export default function Home() {
               </button>
             </div>
           )}
+        </section>
+      </div>
+
+      <div className="stats-wrap mx-auto px-5 pb-14 lg:pb-20">
+        <section className="stats-panel">
+          <div className="stats-panel__header">
+            <p className="stats-eyebrow">Live network pulse</p>
+            <h2>Network analytics, live from contract.</h2>
+            <p>Every stat below pulls from Stellar RPC and updates automatically. One glance tells you if the network is moving.</p>
+          </div>
+
+          <div className="stats-meta">
+            <span className="network-pill stats-network-pill">
+              <i />
+              {networkStats ? `Synced · ledger ${networkStats.latestLedger}` : "Syncing now"}
+            </span>
+            <span className="build-pill">Refreshes every 20s</span>
+          </div>
+
+          <div className="stats-grid">
+            <article className="stats-card">
+              <span className="stats-card__accent" />
+              <span className="stats-card__label">Requests created</span>
+              <strong>{networkStats ? formatCompact(networkStats.totalRequestsCreated) : "—"}</strong>
+              <span className="stats-card__foot">All on-chain payment requests</span>
+            </article>
+            <article className="stats-card">
+              <span className="stats-card__accent stats-card__accent--mint" />
+              <span className="stats-card__label">Distinct users</span>
+              <strong>{networkStats ? formatCompact(networkStats.distinctUsers) : "—"}</strong>
+              <span className="stats-card__foot">Unique wallets in live registry</span>
+            </article>
+            <article className="stats-card stats-card--accent">
+              <span className="stats-card__accent stats-card__accent--violet" />
+              <span className="stats-card__label">XLM flow total</span>
+              <strong>{networkStats ? formatXlm(networkStats.xlmFlowAtomic) : "—"}</strong>
+              <span className="stats-card__foot">Native XLM tracked from requests</span>
+            </article>
+          </div>
+
+          <div className="stats-footer">
+            <div className="stats-footer__row">
+              <div>
+                <span className="stats-footer__label">Latest ledger</span>
+                <strong>{networkStats ? networkStats.latestLedger.toLocaleString() : "—"}</strong>
+              </div>
+              <div className="stats-footer__meter" aria-hidden="true">
+                <span />
+              </div>
+            </div>
+            <p>Real-time pull from Stellar RPC. Cached briefly so panel stays fast, then refreshed in place.</p>
+          </div>
         </section>
       </div>
     </main>
