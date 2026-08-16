@@ -114,6 +114,10 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
                   <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Recipient</p>
                   <p className="mt-1 break-all font-mono text-xs text-slate-600">{draft?.recipient ?? "—"}</p>
                 </div>
+                <div className="rounded-2xl bg-white p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Memo</p>
+                  <p className="mt-1 text-sm text-slate-600">{draft?.memo || "No memo attached"}</p>
+                </div>
               </div>
               <a className="mt-6 inline-flex items-center justify-center rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white" href={`https://stellar.expert/explorer/testnet/tx/${paidHash}`} target="_blank" rel="noreferrer">Open transaction</a>
               <p className="mt-4 text-xs text-slate-400">You can close this tab once hash is saved.</p>
