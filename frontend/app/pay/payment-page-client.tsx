@@ -78,7 +78,32 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
         <section className="w-full rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_24px_80px_rgba(15,23,42,.08)] sm:p-10">
           <div className="flex items-center gap-3 text-sm font-semibold"><span className="grid h-9 w-9 place-items-center rounded-xl bg-violet-600 text-white"><Zap className="h-4 w-4" /></span>LumenLink</div>
           {paidHash ? (
-            <div className="py-14 text-center"><span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-8 w-8" /></span><h1 className="mt-6 text-3xl font-semibold">Payment sent</h1><p className="mt-2 text-sm text-slate-500">The Stellar transaction was submitted successfully.</p><a className="mt-6 inline-block text-sm font-medium text-violet-700" href={`https://stellar.expert/explorer/testnet/tx/${paidHash}`} target="_blank" rel="noreferrer">View transaction</a></div>
+            <div className="py-12 text-center">
+              <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-8 w-8" /></span>
+              <h1 className="mt-6 text-3xl font-semibold">Payment sent successfully</h1>
+              <p className="mt-2 text-sm text-slate-500">Stellar transaction broadcast. Here is receipt data you can save or share.</p>
+              <div className="mx-auto mt-7 grid max-w-lg gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-4 text-left">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-white p-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Request</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">#{requestId}</p>
+                  </div>
+                  <div className="rounded-2xl bg-white p-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Amount</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">{draft?.amount ?? "—"} XLM</p>
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Transaction hash</p>
+                  <p className="mt-1 break-all font-mono text-xs text-slate-600">{paidHash}</p>
+                </div>
+                <div className="rounded-2xl bg-white p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Recipient</p>
+                  <p className="mt-1 break-all font-mono text-xs text-slate-600">{draft?.recipient ?? "—"}</p>
+                </div>
+              </div>
+              <a className="mt-6 inline-flex items-center justify-center rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white" href={`https://stellar.expert/explorer/testnet/tx/${paidHash}`} target="_blank" rel="noreferrer">Open transaction</a>
+            </div>
           ) : draft ? (
             <div className="mt-10">
               <p className="text-xs font-semibold uppercase tracking-[.22em] text-violet-600">Payment request #{requestId}</p>
