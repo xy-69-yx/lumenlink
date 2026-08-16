@@ -116,6 +116,7 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
                 </div>
               </div>
               <a className="mt-6 inline-flex items-center justify-center rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white" href={`https://stellar.expert/explorer/testnet/tx/${paidHash}`} target="_blank" rel="noreferrer">Open transaction</a>
+              <p className="mt-4 text-xs text-slate-400">You can close this tab once hash is saved.</p>
             </div>
           ) : draft ? (
             <div className="mt-10">
@@ -159,7 +160,7 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
               {!wallet ? <button onClick={connect} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-4 text-sm font-semibold text-white"><Wallet className="h-4 w-4" />Connect wallet to pay</button> : <button disabled={paying || wallet.address === draft.recipient} onClick={pay} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-4 text-sm font-semibold text-white disabled:opacity-50">{paying ? <Loader2 className="h-4 w-4 animate-spin" /> : null}{paying ? "Sending payment…" : `Pay ${draft.amount} XLM`}</button>}
               {status ? <p className="mt-4 text-center text-sm text-rose-600">{status}</p> : null}
             </div>
-          ) : <div className="py-20 text-center">{validRequestId ? <Loader2 className="mx-auto h-6 w-6 animate-spin text-violet-600" /> : null}<p className="mt-4 text-sm text-slate-500">{status}</p></div>}
+          ) : <div className="py-20 text-center">{validRequestId ? <Loader2 className="mx-auto h-6 w-6 animate-spin text-violet-600" /> : null}<p className="mt-4 text-sm text-slate-500">{status}</p><p className="mt-2 text-xs text-slate-400">If request should exist, reload or ask sender for fresh link.</p></div>}
         </section>
       </div>
     </main>
