@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Loader2, Wallet, Zap } from "lucide-react";
+import { Check, Copy, Loader2, Wallet, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   connectWallet,
@@ -24,6 +24,7 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
   const [paying, setPaying] = useState(false);
   const [paidHash, setPaidHash] = useState("");
   const [step, setStep] = useState<"loading" | "review" | "processing" | "done">("loading");
+  const [copiedHash, setCopiedHash] = useState(false);
 
   useEffect(() => {
     if (!validRequestId) return;
@@ -72,6 +73,12 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
     }
   }
 
+  async function copyHash() {
+    await navigator.clipboard.writeText(paidHash);
+    setCopiedHash(true);
+    window.setTimeout(() => setCopiedHash(false), 1500);
+  }
+
   return (
     <main className="min-h-screen bg-[#f6f7f9] px-5 py-8 text-slate-950">
       <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-xl items-center">
@@ -95,7 +102,13 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
                 </div>
                 <div className="rounded-2xl bg-white p-3">
                   <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Transaction hash</p>
-                  <p className="mt-1 break-all font-mono text-xs text-slate-600">{paidHash}</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <p className="min-w-0 flex-1 break-all font-mono text-xs text-slate-600">{paidHash}</p>
+                    <button onClick={copyHash} className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[.18em] text-slate-600">
+                      <Copy className="h-3 w-3" />
+                      {copiedHash ? "Copied" : "Copy"}
+                    </button>
+                  </div>
                 </div>
                 <div className="rounded-2xl bg-white p-3">
                   <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Recipient</p>
