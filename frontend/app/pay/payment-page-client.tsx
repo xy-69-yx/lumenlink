@@ -107,6 +107,15 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
                   </div>
                 </div>
               </div>
+              <div className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${step === "processing" ? "border-amber-200 bg-amber-50 text-amber-800" : "border-slate-200 bg-slate-50 text-slate-600"}`}>
+                <div className="flex items-center gap-2 font-medium">
+                  {step === "processing" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4 text-emerald-600" />}
+                  {step === "processing" ? "Transaction in progress" : "Ready to send"}
+                </div>
+                <p className="mt-1 text-xs leading-5 text-current/80">
+                  {step === "processing" ? "Waiting for wallet confirmation and network broadcast." : "Open wallet, review payment details, then approve."}
+                </p>
+              </div>
               <div className="my-8 rounded-2xl bg-slate-950 p-6 text-white"><p className="text-xs uppercase tracking-[.2em] text-white/45">Amount due</p><p className="mt-2 text-4xl font-semibold tracking-tight">{draft.amount} <span className="text-xl text-white/60">XLM</span></p>{draft.memo ? <p className="mt-5 border-t border-white/10 pt-4 text-sm text-white/60">Memo: {draft.memo}</p> : null}</div>
               <p className="break-all text-xs leading-5 text-slate-400">Payment goes to {draft.recipient}</p>
               {!wallet ? <button onClick={connect} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-4 text-sm font-semibold text-white"><Wallet className="h-4 w-4" />Connect wallet to pay</button> : <button disabled={paying || wallet.address === draft.recipient} onClick={pay} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-4 text-sm font-semibold text-white disabled:opacity-50">{paying ? <Loader2 className="h-4 w-4 animate-spin" /> : null}{paying ? "Sending payment…" : `Pay ${draft.amount} XLM`}</button>}
