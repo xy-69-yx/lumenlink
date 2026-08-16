@@ -35,6 +35,7 @@ export default function Home() {
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [shareLink, setShareLink] = useState("");
+  const [createdRequestId, setCreatedRequestId] = useState("");
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -91,7 +92,8 @@ export default function Home() {
       }
       const path = buildRequestPaymentPageUrl(result.request.id);
       setShareLink(`${window.location.origin}${path}`);
-      setStatus("Payment link ready");
+      setCreatedRequestId(result.request.id.toString());
+      setStatus("Payment link ready. Share it or copy it below.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not create request");
     } finally {
@@ -161,13 +163,29 @@ export default function Home() {
           ) : shareLink ? (
             <div className="flex min-h-[430px] flex-col items-center justify-center text-center">
               <span className="grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-8 w-8" /></span>
-              <h2 className="mt-6 text-3xl font-semibold tracking-tight">Your link is ready</h2>
-              <p className="mt-2 text-sm text-slate-500">Send this link to the person who needs to pay you.</p>
-              <div className="mt-7 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 pl-4">
-                <span className="min-w-0 flex-1 truncate text-left font-mono text-xs text-slate-600">{shareLink}</span>
-                <button onClick={copyLink} className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-medium text-white"><Copy className="h-4 w-4" />{copied ? "Copied" : "Copy"}</button>
+              <h2 className="mt-6 text-3xl font-semibold tracking-tight">Your payment request is live</h2>
+              <p className="mt-2 text-sm text-slate-500">Share link, keep request ID handy, and send payer straight to the payment page.</p>
+              <div className="mt-7 grid w-full max-w-xl gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-4 text-left">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Request ID</p>
+                    <p className="mt-1 font-mono text-sm text-slate-700">#{createdRequestId || "—"}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Amount</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">{draft.amount} XLM</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-slate-400">Recipient</p>
+                    <p className="mt-1 truncate font-mono text-xs text-slate-600">{draft.recipient || wallet.address}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 pl-4">
+                  <span className="min-w-0 flex-1 truncate text-left font-mono text-xs text-slate-600">{shareLink}</span>
+                  <button onClick={copyLink} className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-medium text-white"><Copy className="h-4 w-4" />{copied ? "Copied" : "Copy"}</button>
+                </div>
               </div>
-              <button onClick={() => { setShareLink(""); setDraft({ ...initialDraft, recipient: wallet.address }); setStatus(""); }} className="mt-6 text-sm font-medium text-violet-700">Create another request</button>
+              <button onClick={() => { setShareLink(""); setCreatedRequestId(""); setDraft({ ...initialDraft, recipient: wallet.address }); setStatus(""); }} className="mt-6 text-sm font-medium text-violet-700">Create another request</button>
             </div>
           ) : (
             <div>
@@ -183,7 +201,11 @@ export default function Home() {
                 <label className="grid gap-2 text-sm font-medium">Description <span className="font-normal text-slate-400">(optional)</span><textarea value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} placeholder="What is this payment for?" maxLength={512} /></label>
                 <label className="grid gap-2 text-sm font-medium">Memo <span className="font-normal text-slate-400">(optional)</span><input value={draft.memo} onChange={(e) => setDraft({ ...draft, memo: e.target.value })} placeholder="Invoice-001" maxLength={28} /></label>
               </div>
-              {status ? <p className={`mt-5 text-sm ${status.includes("Saving") ? "text-slate-500" : "text-rose-600"}`}>{status}</p> : null}
+              {status ? (
+                <div className={`mt-5 rounded-2xl border px-4 py-3 text-sm ${status.includes("Payment link ready") ? "border-emerald-200 bg-emerald-50 text-emerald-800" : status.includes("Saving") ? "border-slate-200 bg-slate-50 text-slate-600" : "border-rose-200 bg-rose-50 text-rose-700"}`}>
+                  {status}
+                </div>
+              ) : null}
               <button disabled={saving} onClick={handleCreate} className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-4 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:opacity-50">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}{saving ? "Saving on-chain…" : "Create payment link"}
               </button>
