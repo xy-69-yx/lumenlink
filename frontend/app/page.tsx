@@ -185,6 +185,7 @@ export default function Home() {
                   <button onClick={copyLink} className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-medium text-white"><Copy className="h-4 w-4" />{copied ? "Copied" : "Copy"}</button>
                 </div>
               </div>
+              <p className="mt-4 max-w-lg text-xs leading-5 text-slate-400">Anyone with this link can open the request. Keep it private until you want payer to see it.</p>
               <button onClick={() => { setShareLink(""); setCreatedRequestId(""); setDraft({ ...initialDraft, recipient: wallet.address }); setStatus(""); }} className="mt-6 text-sm font-medium text-violet-700">Create another request</button>
             </div>
           ) : (
