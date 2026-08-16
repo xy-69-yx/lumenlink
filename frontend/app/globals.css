@@ -29,6 +29,9 @@ button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .48; }
 button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(101,72,232,.18); outline-offset: 2px; }
+a { transition: color .16s ease, background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease; }
+button { transition: color .16s ease, background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease, opacity .16s ease; }
+button:hover:not(:disabled) { transform: translateY(-1px); }
 ::selection { background: #d9d2ff; }
 
 .app-shell { display: grid; grid-template-columns: 76px minmax(0, 1fr); min-height: 100vh; }
