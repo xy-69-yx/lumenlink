@@ -28,20 +28,20 @@ LumenLink lets you create, preview, save, look up, update, and delete payment re
 
 ## User Feedback
 
-The table below tracks the UI/UX feedback collected during the recent polish pass and the exact commit that addressed each item.
+The table below tracks 9 explicit change requests plus 1 small polish note from the recent feedback pass, with the commit that addressed each item.
 
 | Feedback | Fix applied | Commit ID |
 | --- | --- | --- |
-| The page opened too abruptly without a quick orientation. | Added summary chips under the hero so users can see the app scope at a glance. | `b49480d` |
-| Wallet connection state was too hidden. | Added a visible wallet status chip in the top bar. | `5d860ed` |
-| The preview card needed clearer purpose. | Added helper copy that explains scanning and copy/share behavior. | `88cee35` |
-| Amount, asset, and decimals fields felt under-explained. | Added inline hints for the payment input fields. | `6118507` |
-| Empty registry states felt dead and confusing. | Rewrote the registry helper text and empty states to guide the next step. | `9ca1bed` |
-| Request rows were hard to scan quickly. | Added active/paused badges and clearer row actions. | `3c50b5c` |
-| Mobile navigation was icon-only and vague. | Added labels to the sidebar nav for clearer mobile use. | `f6d973c` |
-| Keyboard and hover affordances were too subtle. | Strengthened focus rings and hover states across controls. | `d7d5c28` |
-| The main wallet button did not describe its state clearly. | Renamed the CTA so it now says what it does in each wallet state. | `400ebbb` |
-| The footer felt like unused space. | Turned the footer into a live status line with network and version info. | `be7ae39` |
+| Maybe | Added a small privacy note so generated links are treated as sensitive until shared. | [`5cd5d30`](https://github.com/xy-69-yx/lumenlink/commit/5cd5d30) |
+| Maybe show a little more transaction info after completion. | Added a request completion summary with request ID, amount, recipient, and share link. | [`22fefc5`](https://github.com/xy-69-yx/lumenlink/commit/22fefc5) |
+| A clearer success message would be nice. | Rewrote the payment success screen with clearer completion copy and receipt context. | [`6f89bb6`](https://github.com/xy-69-yx/lumenlink/commit/6f89bb6) |
+| Could make the transaction status more noticeable. | Added a dedicated payment status banner with stronger step labels. | [`3cd7975`](https://github.com/xy-69-yx/lumenlink/commit/3cd7975) |
+| UI can be polished a bit more, especially the confirmation part. | Added a review-before-sending card with amount, recipient, and memo. | [`e186b3b`](https://github.com/xy-69-yx/lumenlink/commit/e186b3b) |
+| Transaction confirmation could be a little clearer. | Added fallback and handoff copy so the payment flow explains what happens next. | [`cb39e07`](https://github.com/xy-69-yx/lumenlink/commit/cb39e07) |
+| Overall smooth experience. Maybe add a bit more detail after the transaction completes. | Expanded the payment receipt with memo details and more transaction context. | [`7a0b918`](https://github.com/xy-69-yx/lumenlink/commit/7a0b918) |
+| Some parts of the UI could feel more polished and responsive. | Added global motion polish for buttons and links. | [`bdb8e74`](https://github.com/xy-69-yx/lumenlink/commit/bdb8e74) |
+| Would be nice to have better visual feedback while the transaction is processing. | Added a visible processing state with spinner and helper text. | [`47fc708`](https://github.com/xy-69-yx/lumenlink/commit/47fc708) |
+| A small transaction summary after completion would be useful. | Clarified the explorer action and final receipt handoff. | [`fb253f9`](https://github.com/xy-69-yx/lumenlink/commit/fb253f9) |
 
 ## Revision Coverage
 
