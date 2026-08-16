@@ -119,7 +119,7 @@ export default function PaymentPageClient({ searchParams }: { searchParams: Reco
                   <p className="mt-1 text-sm text-slate-600">{draft?.memo || "No memo attached"}</p>
                 </div>
               </div>
-              <a className="mt-6 inline-flex items-center justify-center rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white" href={`https://stellar.expert/explorer/testnet/tx/${paidHash}`} target="_blank" rel="noreferrer">Open transaction</a>
+              <a className="mt-6 inline-flex items-center justify-center rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white" href={`https://stellar.expert/explorer/testnet/tx/${paidHash}`} target="_blank" rel="noreferrer">View on Stellar Expert</a>
               <p className="mt-4 text-xs text-slate-400">You can close this tab once hash is saved.</p>
             </div>
           ) : draft ? (
