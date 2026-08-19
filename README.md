@@ -260,3 +260,33 @@ If they are not set, the app falls back to the testnet values listed above.
 - The browser app uses Stellar Wallets Kit to support multiple wallets from one integration, including Lobstr, xBull, Albedo, Rabet, Hana, Ledger, Trezor, and WalletConnect.
 - The default contract target is Stellar testnet.
 - The live app UI is designed to work on desktop and mobile.
+
+## Level 4 Checklist
+
+### Completed
+
+- [x] Production MVP built
+- [x] Stable frontend and smart contract architecture
+- [x] Mobile responsive UI
+- [x] Loading states and error handling
+- [x] User onboarding flow with wallet connect
+- [x] Real user feedback collection
+- [x] Production deployment
+- [x] Contract deployed on Stellar testnet
+- [x] 15+ meaningful commits
+- [x] Public GitHub repository
+- [x] Live demo video
+- [x] Contract deployment address documented
+- [x] Screenshots for product UI
+- [x] Screenshots for mobile responsive design
+- [x] Proof of 10+ user wallet interactions
+- [x] Basic user feedback summary
+
+### Available
+
+- [x] Live app: https://lumenlink.vercel.app/
+- [x] Google Form: https://forms.gle/7VkZ8fiSB5xKSfao6
+- [x] Response sheet: https://docs.google.com/spreadsheets/d/1BqT88ddOX48yBQBE5y5k9shXqJErem_ENQ3zpNKKCF4/edit?resourcekey=&gid=1834910155#gid=1834910155
+- [x] Demo video: https://drive.google.com/file/d/1ddkKMPZn6yJ-z8TnKaBEAViER5Db0wZO/view?usp=sharing
+- [x] Contract ID: `CBCWLMJPKWECI6F2HGNBEQ3KF4PYXBL5E22UNPHLOSEVHSQRZPUB5R5B`
+- [x] Screenshots embedded in README
