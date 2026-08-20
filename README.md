@@ -12,6 +12,7 @@ LumenLink lets you create, preview, save, look up, update, and delete payment re
 - Google Form: https://forms.gle/7VkZ8fiSB5xKSfao6
 - Response sheet: https://docs.google.com/spreadsheets/d/1BqT88ddOX48yBQBE5y5k9shXqJErem_ENQ3zpNKKCF4/edit?resourcekey=&gid=1834910155#gid=1834910155
 - Demo video: https://drive.google.com/file/d/1ddkKMPZn6yJ-z8TnKaBEAViER5Db0wZO/view?usp=sharing
+- PPT Link - https://docs.google.com/presentation/d/1rA63wYzkXvMSKz7TZn_nufW8ej_jZMleU3uIHfON4r8/edit?usp=sharing
 
 ## What It Does
 
